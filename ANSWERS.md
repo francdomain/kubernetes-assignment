@@ -49,6 +49,7 @@ kubectl describe node worker-node-2 | grep -i taint
 kubectl get pods -n ecommerce -l app=postgres -o wide
 # Output shows IP from 192.168.19.x range (worker-node-2's pod CIDR)
 ```
+![](./screenshots/postres-pod.png)
 
 ---
 
