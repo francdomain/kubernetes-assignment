@@ -2,6 +2,8 @@
 
 ## Part 1: Cluster Setup and Node Labeling
 
+![](./screenshots/all-nodes.png)
+
 ### Task 1.2: Node Labeling
 
 **Applied labels:**
@@ -14,11 +16,19 @@ kubectl label nodes worker-node-2 tier=backend storage=hdd
 ```bash
 kubectl get nodes --show-labels
 ```
+![](./screenshots/show-labells.png)
 
 **Why these labels?**
 - `tier=frontend|backend`: Separates workloads between nodes
 - `storage=ssd|hdd`: Indicates storage capabilities for workload optimization
 
+**Taint verification**
+
+```bash
+kubectl describe node worker-node-1 | grep -i taint
+kubectl describe node worker-node-2 | grep -i taint
+```
+![](./screenshots/taint-verif.png)
 ---
 
 ## Part 2: Deploy the Database Layer
