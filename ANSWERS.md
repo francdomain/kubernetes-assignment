@@ -494,7 +494,6 @@ kubectl get nodes -o wide
 curl http://172.31.18.239:30080  # worker-node-1
 curl http://172.31.23.250:30080   # worker-node-2 (kube-proxy redirects)
 ```
-
 ![](./screenshots/test-front.png)
 
 **Why both nodes work:**
@@ -509,10 +508,65 @@ curl http://172.31.23.250:30080   # worker-node-2 (kube-proxy redirects)
 BACKEND_URL=http://backend:8080
 # This allows frontend to make requests to backend service
 ```
+```bash
+# Scale frontend to 6 replicas
+kubectl scale deployment frontend --replicas=6
+# Watch the scaling process
+kubectl get pods -l app=frontend -w
+```
+![](./screenshots/fe6.png)
 
 ---
 
 ## Part 6: Create Static Pods for Monitoring
+
+![](./screenshots/static-path.png)
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: monitoring-agent
+  namespace: kube-system
+  labels:
+    app: monitoring
+    component: agent
+spec:
+  containers:
+  - name: agent
+    image: busybox:latest
+    command:
+    - sh
+    - -c
+    - |
+      while true; do
+        echo "$(date): Monitoring node $(hostname)"
+        sleep 30
+      done
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+```
+![](./screenshots/stat-file.png)
+![](./screenshots/stat-pod-yml.png)
+
+**Verify Static Pod**
+
+```bash
+# On the control plane
+kubectl get pods -n kube-system -o wide | grep monitoring
+# Check logs
+kubectl logs -n kube-system monitoring-agent-<node-name>
+```
+![](./screenshots/verify-stat.png)
+
+**Screenshot showing pod recreation after deletion attempt**
+
+![](./screenshots/stat-del-recrt.png)
 
 ### Question 1: What happens when you try to delete a static pod? Why?
 
