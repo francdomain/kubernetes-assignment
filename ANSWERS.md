@@ -337,7 +337,7 @@ curl http://backend:8080
 nslookup postgres
 nslookup redis
 ```
-
+![](./screenshots/test-conn.png)
 ![](./screenshots/test-connect.png)
 
 **Why communication works:**
