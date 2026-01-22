@@ -564,10 +564,6 @@ kubectl logs -n kube-system monitoring-agent-<node-name>
 ```
 ![](./screenshots/verify-stat.png)
 
-**Screenshot showing pod recreation after deletion attempt**
-
-![](./screenshots/stat-del-recrt.png)
-
 ### Question 1: What happens when you try to delete a static pod? Why?
 
 **Answer:**
@@ -581,6 +577,9 @@ kubectl delete pod monitoring-agent -n kube-system
 kubectl get pods -n kube-system | grep monitoring
 # Pod is recreated immediately!
 ```
+**Screenshot showing pod recreation after deletion attempt**
+
+![](./screenshots/stat-del-recrt.png)
 
 **Why this happens:**
 1. **kubelet watches the manifest file** `/etc/kubernetes/manifests/`
@@ -734,6 +733,11 @@ ps aux | grep monitoring
 ```bash
 kubectl drain worker-node-1 --ignore-daemonsets
 ```
+![](./screenshots/drain-node.png)
+
+**Observe:**
+
+![](./screenshots/obsv-drain.png)
 
 **What happens to pods:**
 
