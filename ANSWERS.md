@@ -136,6 +136,7 @@ kubectl get pods -n ecommerce -l app=redis -o wide
 # redis-5ff6b64866-kfr4d     192.168.212.65    worker-node-1
 # redis-5ff6b64866-dpjgm     192.168.19.130    worker-node-2
 ```
+![](./screenshots/redis-pod.png)
 
 **Why:**
 - Pod **anti-affinity** rule is configured
@@ -328,44 +329,16 @@ preferredDuringSchedulingIgnoredDuringExecution:
 
 1. **Service Discovery:**
 ```bash
-kubectl exec -it <backend-pod> -n ecommerce -- sh
-# Inside the pod:
+# Create a test pod to verify connectivity
+kubectl run test-pod --image=curlimages/curl --rm -it --restart=Never -- sh
+
+# Inside the pod, test connections:
+curl http://backend:8080
 nslookup postgres
-# Output:
-# Server:     10.96.0.10
-# Address:    10.96.0.10:53
-# Name:       postgres.ecommerce.svc.cluster.local
-# Address:    10.102.105.203
-
 nslookup redis
-# Output:
-# Server:     10.96.0.10
-# Address:    10.96.0.10:53
-# Name:       redis.ecommerce.svc.cluster.local
-# Address:    10.103.250.129
 ```
 
-2. **Pod-to-Pod Connectivity:**
-```bash
-kubectl exec -it <backend-pod> -n ecommerce -- ping -c 2 <postgres-pod-ip>
-# Successful ping responses
-
-kubectl exec -it <backend-pod> -n ecommerce -- ping -c 2 <redis-pod-ip>
-# Successful ping responses
-```
-
-3. **HTTP/TCP Connectivity:**
-```bash
-# Test postgres connection
-kubectl exec -it <backend-pod> -n ecommerce -- sh
-# Inside pod:
-apt-get update && apt-get install -y postgresql-client
-psql -h postgres.ecommerce.svc.cluster.local -U postgres -c "SELECT 1"
-
-# Test redis connection
-redis-cli -h redis.ecommerce.svc.cluster.local ping
-# Output: PONG
-```
+![](./screenshots/test-connect.png)
 
 **Why communication works:**
 1. **Same namespace:** All in `ecommerce` namespace
