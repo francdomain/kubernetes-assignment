@@ -337,8 +337,8 @@ curl http://backend:8080
 nslookup postgres
 nslookup redis
 ```
-![](./screenshots/test-conn.png)
-![](./screenshots/test-connect.png)
+![](./screenshots/test-con.png)
+
 
 **Why communication works:**
 1. **Same namespace:** All in `ecommerce` namespace
