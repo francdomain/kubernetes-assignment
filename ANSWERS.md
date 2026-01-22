@@ -2,7 +2,7 @@
 
 ## Part 1: Cluster Setup and Node Labeling
 
-![](./screenshots/all-nodes.png)
+![](./screenshots/nodes.png)
 
 ### Task 1.2: Node Labeling
 
@@ -493,9 +493,9 @@ kubectl get nodes -o wide
 # Browser or curl
 curl http://172.31.18.239:30080  # worker-node-1
 curl http://172.31.23.250:30080   # worker-node-2 (kube-proxy redirects)
-
-# Expected response: Nginx welcome page or custom frontend HTML
 ```
+
+![](./screenshots/test-front.png)
 
 **Why both nodes work:**
 - NodePort opens port 30080 on **all nodes**
