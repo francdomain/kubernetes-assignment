@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      nodeSelector:
+        tier: backend
+      tolerations:
+      - key: "workload"
+        operator: "Equal"
+        value: "backend"
+        effect: "NoSchedule"
+      containers:
+      - name: postgres
+        image: postgres:16
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "secure_password"
+        ports:
+        - containerPort: 5432
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"

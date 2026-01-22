@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broken-app
+  namespace: ecommerce
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: broken
+  template:
+    metadata:
+      labels:
+        app: broken
+    spec:
+      nodeSelector:
+        tier: frontend
+      tolerations:
+      - key: workload
+        operator: Equal
+        value: frontend
+        effect: NoSchedule
+      containers:
+      - name: app
+        image: nginx:alpine
+        resources:
+          requests:
+            cpu: "500m"  # Fixed from 5000m
+            memory: "512Mi"  # Fixed from 10Gi

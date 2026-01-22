@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batch-processor
+  namespace: ecommerce
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: batch
+  template:
+    metadata:
+      labels:
+        app: batch
+    spec:
+      priorityClassName: low-priority
+      tolerations:
+      - key: workload
+        operator: Equal
+        value: backend
+        effect: NoSchedule
+      containers:
+      - name: processor
+        image: busybox
+        command: ["sh", "-c", "sleep 3600"]
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
